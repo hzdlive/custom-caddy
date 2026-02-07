@@ -37,6 +37,8 @@ jobs:
       contents: read
       packages: write
       security-events: write
+      id-token: write
+      attestations: write
     
     strategy:
       fail-fast: false
