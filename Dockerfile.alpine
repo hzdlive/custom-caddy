@@ -1,0 +1,31 @@
+FROM caddy:builder-alpine AS builder
+
+ARG CADDY_VERSION=latest
+
+# 构建带有 forward_proxy 插件的 Caddy
+RUN xcaddy build ${CADDY_VERSION} \
+    --with github.com/caddyserver/forwardproxy
+
+FROM caddy:alpine
+
+# 添加元数据标签
+LABEL maintainer="your-email@example.com" \
+      org.opencontainers.image.title="Caddy Forward Proxy" \
+      org.opencontainers.image.description="Caddy server with forward proxy plugin (Alpine)" \
+      org.opencontainers.image.source="https://github.com/your-username/your-repo"
+
+# 复制自定义构建的 Caddy
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:2019/config/ || exit 1
+
+# 暴露端口
+EXPOSE 80 443 443/udp 2019
+
+# 默认工作目录
+WORKDIR /srv
+
+# 使用非 root 用户运行
+USER caddy
