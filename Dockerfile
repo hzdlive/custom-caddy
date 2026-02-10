@@ -5,7 +5,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
-# 构建带有 forward_proxy 插件的 Caddy
+# 构建带有 forward_proxy 和 cloudflare DNS 插件的 Caddy
 RUN xcaddy build ${CADDY_VERSION} \
     --with github.com/caddyserver/forwardproxy \
     --with github.com/caddy-dns/cloudflare
