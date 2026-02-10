@@ -7,17 +7,18 @@ ARG VERSION
 
 # 构建带有 forward_proxy 插件的 Caddy
 RUN xcaddy build ${CADDY_VERSION} \
-    --with github.com/caddyserver/forwardproxy
+    --with github.com/caddyserver/forwardproxy \
+    --with github.com/caddy-dns/cloudflare
 
 FROM caddy:latest
 
 # 添加元数据标签
 LABEL maintainer="your-email@example.com" \
       org.opencontainers.image.created="${BUILD_DATE}" \
-      org.opencontainers.image.title="Caddy Forward Proxy" \
-      org.opencontainers.image.description="Caddy server with forward proxy plugin" \
-      org.opencontainers.image.url="https://github.com/your-username/your-repo" \
-      org.opencontainers.image.source="https://github.com/your-username/your-repo" \
+      org.opencontainers.image.title="Caddy Forward Proxy with Cloudflare DNS" \
+      org.opencontainers.image.description="Caddy server with forward proxy and Cloudflare DNS plugins" \
+      org.opencontainers.image.url="https://hub.docker.com/r/hzdlive/caddy-forward-proxy" \
+      org.opencontainers.image.source="https://github.com/hzdlive/caddy-forward-proxy" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.vendor="Your Name" \
