@@ -1,18 +1,28 @@
 FROM caddy:builder-alpine AS builder
 
 ARG CADDY_VERSION=latest
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
 
-# 构建带有 forward_proxy 插件的 Caddy
+# 构建带有 forward_proxy 和 cloudflare DNS 插件的 Caddy
 RUN xcaddy build ${CADDY_VERSION} \
-    --with github.com/caddyserver/forwardproxy
+    --with github.com/caddyserver/forwardproxy \
+    --with github.com/caddy-dns/cloudflare
 
 FROM caddy:alpine
 
 # 添加元数据标签
 LABEL maintainer="your-email@example.com" \
-      org.opencontainers.image.title="Caddy Forward Proxy" \
-      org.opencontainers.image.description="Caddy server with forward proxy plugin (Alpine)" \
-      org.opencontainers.image.source="https://github.com/your-username/your-repo"
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.title="Caddy Forward Proxy with Cloudflare DNS (Alpine)" \
+      org.opencontainers.image.description="Caddy server with forward proxy and Cloudflare DNS plugins (Alpine)" \
+      org.opencontainers.image.source="https://hub.docker.com/r/hzdlive/caddy-forward-proxy"
+      org.opencontainers.image.source="https://github.com/hzdlive/caddy-forward-proxy" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.vendor="hzdlive" \
+      org.opencontainers.image.licenses="Apache-2.0"
 
 # 复制自定义构建的 Caddy
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
