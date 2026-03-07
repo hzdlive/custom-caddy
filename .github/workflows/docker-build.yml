@@ -4,16 +4,16 @@ name: Docker Build Standard
 # 支持多架构、自动版本标签、构建缓存
 
 on:
-  push:
-    branches:
-      - main
-      - master
-    tags:
-      - 'v*.*.*'
-  pull_request:
-    branches:
-      - main
-      - master
+  #push:
+  #  branches:
+  #    - main
+  #    - master
+  #  tags:
+  #    - 'v*.*.*'
+  #pull_request:
+  #  branches:
+  #    - main
+  #    - master
   workflow_dispatch:
 
 env:
